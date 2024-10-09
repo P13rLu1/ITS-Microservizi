@@ -1,0 +1,276 @@
+openapi: 3.0.3
+info:
+  title: API album
+  description: |-
+    Una API che consente la creazione, lettura e modifica 
+    ed eliminazione di un album nello store
+  version: 1.0.0
+  contact:
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /album/{idAlbum}:
+    get:
+      tags:
+        - album
+      summary: restituisce un album
+      description: ritorna un singolo album
+      operationId: getAlbumById
+      parameters:
+        - name: idAlbum
+          in: path
+          description: ID of album to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Album not found
+
+    delete:
+      tags:
+        - album
+      summary: Elimina un album
+      description: Elimina un album Addio amico 🫡
+      operationId: deleteAlbum
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: idAlbum
+          in: path
+          description: Id dell'album da eliminare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Valore Album Invalido
+
+  /album:
+    post:
+      tags:
+        - album
+      summary: Crea un nuovo album
+      description: Aggiungi un nuovo album al base of dates
+      operationId: createAlbum
+      requestBody:
+        description: Crea un nuovo album nello store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Album'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        '400':
+          description: Invalid output
+        '404':
+          description: Validation exception
+
+    put:
+      tags:
+        - album
+      summary: Aggiorna Un Album Esistente
+      description: Aggiorna un Album Esistente con l'ID
+      operationId: updateAlbum
+      requestBody:
+        description: Aggiorna un album nello store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Album'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Album'
+        '400':
+          description: ID invalido
+        '404':
+          description: Album non trovato
+        '422':
+          description: Eccezione di Validazione
+
+  /album/findByGenre:
+    get:
+      tags:
+        - album
+      summary: Trova gli album dal genere
+      description: Possono essere dati piú generi, separati dalla virgola
+      operationId: findAlbumsByGenres
+      parameters:
+        - name: genre
+          in: query
+          description: Valori del genere che devono essere considerate per il filtro
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: rock
+            enum:
+              - rock
+              - pop
+              - metal
+      responses:
+        '200':
+          description: Operazione Avvenuta Con Successo
+          content:
+            application/json:
+              schema:
+                # type: array
+                # items:
+                #   $ref: "#/components/schemas/Album"
+                $ref: '#/components/schemas/AlbumList'
+        '400':
+          description: Valore Invalido
+        '404':
+          description: Album non trovato
+
+  /search-album:
+    get:
+      tags:
+        - album
+      summary: Cerca gli album
+      description: Operazione per cercare un album da parametri
+      parameters:
+        - in: query
+          name: author
+          schema:
+            type: string
+          description: Il Nome Dell'artista
+        - in: query
+          name: genre
+          schema:
+            type: string
+          description: Il Genere Dell'album
+      responses:
+        '200':
+          description: Operazione Avvenuta Con Successo
+          content:
+            application/json:
+              schema:
+                # type: array
+                # items:
+                #   $ref: '#/components/schemas/Album'
+                $ref: '#/components/schemas/AlbumList'
+        '400':
+          description: Valore non valido
+        '404':
+          description: Album non trovato
+  
+  /album/{idAlbum}/add-band:
+    put:
+      tags:
+        - album
+      summary: Mette La Band ad un album
+      description: Mette la band ad un album con l'Id
+      operationId: addBandToAlbum
+      parameters:
+        - name: idAlbum
+          in: path
+          description: ID of album to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Mette una band nell'album
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Band'
+        required: true
+      responses:
+        '200':
+          description: Operazione Avvenuta Con Successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        '400':
+          description: Valore non valido
+        '404':
+          description: Album non trovato
+
+components:
+  schemas:
+    Album:
+      type: object
+      properties:
+        idAlbum:
+          type: integer
+          format: int64
+          example: 10
+        title:
+          type: string
+          description: titolo dell'album
+          example: Master Of Puppets
+        author:
+          type: string
+          description: Autore dell'album
+          example: Metallica
+        dataUscita:
+          type: string
+        genere:
+          type: string
+          description: Genere album
+          example: metal
+          enum:
+            - rock
+            - pop
+            - metal
+            - jazz
+            - grunge
+            - classica
+            - leggera
+        isAvailable:
+          type: boolean
+          description: "Album disponibile oppure no"
+        songs:
+          type: array
+          items:
+            type: string
+        band:
+          type: object
+          items:
+            $ref: "#/components/schemas/Band"
+        year:
+          type: integer
+          example: 1986
+
+    AlbumList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Album"
+
+    Band:
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        { "Drummer": "Lars Ulrich" }
