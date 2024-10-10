@@ -74,7 +74,7 @@ public class AlbumController implements AlbumApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteAlbum(@Parameter(name = "idAlbum",description = "Id dell'album da eliminare",required = true,in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum, @Parameter(name = "api_key",description = "",in = ParameterIn.HEADER) @RequestHeader(value = "api_key",required = false) String apiKey) {
+    public ResponseEntity<Void> deleteAlbum(@Parameter(name = "idAlbum",description = "Id dell'album da eliminare",required = true,in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum) {
 
         logger.info("Album eliminato con successo");
 
