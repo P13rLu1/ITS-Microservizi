@@ -1,7 +1,12 @@
 package it.apuliadigital.esercizio01albumapi.service;
 
-import org.springframework.stereotype.Component;
+import it.apuliadigital.esercizio01albumapi.model.Album;
 
-@Component
-public class AlbumService {
+public interface AlbumService {
+
+    Album getAlbumById(Long idAlbum);
+
+    Album createAlbum(Album album);
+
+    Album deleteAlbum(Long idAlbum);
 }

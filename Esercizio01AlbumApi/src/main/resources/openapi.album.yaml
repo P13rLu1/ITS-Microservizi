@@ -53,6 +53,12 @@ paths:
       responses:
         '400':
           description: Valore Album Invalido
+        '200':
+          description: Album Eliminato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
 
   /album:
     post:
@@ -219,7 +225,8 @@ components:
         idAlbum:
           type: integer
           format: int64
-          example: 10
+          readOnly: true
+          example: 1
         title:
           type: string
           description: titolo dell'album
@@ -266,5 +273,3 @@ components:
       type: object
       additionalProperties:
         type: string
-      example:
-        { "Drummer": "Lars Ulrich" }
