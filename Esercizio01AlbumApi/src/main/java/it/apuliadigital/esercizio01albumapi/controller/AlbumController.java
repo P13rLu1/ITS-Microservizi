@@ -3,7 +3,6 @@ package it.apuliadigital.esercizio01albumapi.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import it.apuliadigital.esercizio01albumapi.api.AlbumApi;
-import it.apuliadigital.esercizio01albumapi.api.ApiUtil;
 import it.apuliadigital.esercizio01albumapi.model.Album;
 import it.apuliadigital.esercizio01albumapi.service.AlbumService;
 import jakarta.validation.Valid;
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,84 +27,57 @@ public class AlbumController implements AlbumApi {
 
     @Override
     public ResponseEntity<Album> createAlbum(@Parameter(name = "Album", description = "Crea un nuovo album nello store", required = true) @RequestBody @Valid Album album) {
-//        album.setIdAlbum(666L);
         Album albumdto = albumService.createAlbum(album);
+        logger.info("Album creato con successo");
 
         return new ResponseEntity<>(albumdto, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<Album> getAlbumById(@Parameter(name = "idAlbum", description = "ID of album to return", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum) {
-
-//        List<Map<String, String>> l = new ArrayList<>();
-//        Map<String, String> bandMap = new HashMap<>();
-//        bandMap.put("Chitarra", "David Gilmour");
-//        bandMap.put("Batteria", "Nick Mason");
-//        bandMap.put("Basso", "Roger Waters");
-//        bandMap.put("Tastiere", "Richard Wright");
-//        l.add(bandMap);
-//
-//        Album album = new Album();
-//        album.setAuthor("Pink Floyd");
-//        album.setBand(l);
-//        album.setGenere(Album.GenereEnum.ROCK);
-//        album.setIdAlbum(1L);
-//        album.setTitle("The Dark Side of the Moon");
-//        album.setYear(1973);
-
         Album albumdto = albumService.getAlbumById(idAlbum);
 
         return new ResponseEntity<>(albumdto, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Album> addBandToAlbum(@Parameter(name = "idAlbum", description = "ID of album to return", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum, @Parameter(name = "request_body", description = "Mette una band nell'album", required = true) @RequestBody @Valid Map<String, String> requestBody) {
-
-        List<Map<String, String>> l = new ArrayList<>();
-        Map<String, String> bandMap = new HashMap<>();
-        bandMap.put("Chitarra", "David Gilmour");
-        bandMap.put("Batteria", "Nick Mason");
-        bandMap.put("Basso", "Roger Waters");
-        bandMap.put("Tastiere", "Richard Wright");
-        l.add(bandMap);
-
-        Album album = new Album();
-        album.setAuthor("Pink Floyd");
-        album.setBand(l);
-        album.setGenere(Album.GenereEnum.ROCK);
-        album.setIdAlbum(2L);
-        album.setTitle("The Wall");
-        album.setYear(1979);
-
-        return new ResponseEntity<>(album, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<Album> deleteAlbum(@Parameter(name = "idAlbum",description = "Id dell'album da eliminare",required = true,in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum) {
-
+    public ResponseEntity<Album> deleteAlbum(@Parameter(name = "idAlbum", description = "Id dell'album da eliminare", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum) {
         Album albumdto = albumService.deleteAlbum(idAlbum);
+        logger.info("Album eliminato con successo");
 
         return new ResponseEntity<>(albumdto, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<Album>> findAlbumsByGenres(@Parameter(name = "genre", description = "Valori del genere che devono essere considerate per il filtro", required = true, in = ParameterIn.QUERY) @RequestParam(value = "genre", required = true, defaultValue = "rock") @NotNull @Valid String genre) {
-        List<Map<String, String>> l = new ArrayList<>();
-        Map<String, String> bandMap = new HashMap<>();
-        bandMap.put("Chitarra", "David Gilmour");
-        bandMap.put("Batteria", "Nick Mason");
-        bandMap.put("Basso", "Roger Waters");
-        bandMap.put("Tastiere", "Richard Wright");
-        l.add(bandMap);
+    public ResponseEntity<Album> updateAlbum(
+            @Parameter(name = "idAlbum", description = "Id dell'album da eliminare", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum,
+            @Parameter(name = "Album", description = "Aggiorna un album nello store", required = true) @Valid @RequestBody Album album
+    ) {
+        Album albumdto = albumService.updateAlbum(album, idAlbum);
+        logger.info("Album aggiornato con successo");
 
-        Album album = new Album();
-        album.setAuthor("Pink Floyd");
-        album.setBand(l);
-        album.setGenere(Album.GenereEnum.ROCK);
-        album.setIdAlbum(1L);
-        album.setTitle("The Wall");
-        album.setYear(1979);
+        return new ResponseEntity<>(albumdto, HttpStatus.OK);
 
-        return new ResponseEntity<>(Collections.singletonList(album), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Album> addBandToAlbum(
+            @Parameter(name = "idAlbum", description = "ID of album to return", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum,
+            @Parameter(name = "request_body", description = "Mette una band nell'album", required = true) @Valid @RequestBody List<String> requestBody
+    ) {
+        Album albumdto = albumService.addBand(idAlbum, requestBody);
+        logger.info("Band aggiunta con successo");
+
+        return new ResponseEntity<>(albumdto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Album>> findAlbumsByGenres(@Parameter(name = "genre", description = "Valori del genere che devono essere considerate per il filtro", required = true, in = ParameterIn.QUERY) @RequestParam(value = "genre", defaultValue = "rock") @NotNull @Valid String genre) {
+
+        try{
+            return new ResponseEntity<>(albumService.getAlbumByGenre(Album.GenereEnum.fromValue(genre)), HttpStatus.OK);
+        }   catch (IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -6,7 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface AlbumRepository extends CrudRepository<AlbumEntity, Long> {
+public interface SearchAlbumRepository extends CrudRepository<AlbumEntity, Long> {
+
+    List<AlbumEntity> findByAuthor(String author);
 
     List<AlbumEntity> findByGenre(Album.GenereEnum genre);
+
+    List<AlbumEntity> findByAuthorAndGenre(String author, Album.GenereEnum genre);
 }

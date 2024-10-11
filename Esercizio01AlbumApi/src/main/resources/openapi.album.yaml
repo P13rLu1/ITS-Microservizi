@@ -9,7 +9,7 @@ info:
     email: pierluigibuttazzo.21@gmail.com
 
 paths:
-  /album/search:
+  /search-album:
     get:
       tags:
         - album
@@ -190,7 +190,7 @@ paths:
           description: Valore Invalido
         '404':
           description: Album non trovato
-  
+
   /album/{idAlbum}/add-band:
     put:
       tags:
@@ -211,7 +211,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Band'
+              type: array
+              items:
+                type: string
         required: true
       responses:
         '200':
@@ -245,6 +247,7 @@ components:
           example: Metallica
         dataUscita:
           type: string
+          example: 1986-03-03
         genere:
           type: string
           description: Genere album
@@ -262,12 +265,14 @@ components:
           description: "Album disponibile oppure no"
         songs:
           type: array
+          example: [ "Battery", "Master Of Puppets", "The Thing That Should Not Be", "Welcome Home (Sanitarium)", "Disposable Heroes", "Leper Messiah", "Orion", "Damage, Inc." ]
           items:
             type: string
         band:
-          type: object
+          type: array
+          example: [ "James Hetfield", "Lars Ulrich", "Kirk Hammett", "Robert Trujillo" ]
           items:
-            $ref: "#/components/schemas/Band"
+            type: string
         year:
           type: integer
           example: 1986
@@ -276,8 +281,3 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Album"
-
-    Band:
-      type: object
-      additionalProperties:
-        type: string
