@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Portale API
+  description: API for retrieving artist and album information.
+  version: 1.0.0
+
+paths:
+  /portale/artistaEAlbum/{idArtista}:
+    get:
+      tags:
+        - portale
+      summary: Trova artista tramite il suo id e restituisce gli album
+      description: Ritorna le informazioni dell'artista e la lista dei suoi album
+      operationId: artistandAlbum
+      parameters:
+        - name: idArtista
+          in: path
+          description: Id dell'artista da ritornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione Avvenuta con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistaEAlbums'
+        '404':
+          description: Artista non trovato
+        '500':
+          description: Errore del server
+
+  /portale/album/{idAlbum}:
+    get:
+      tags:
+        - portale
+      summary: Trova l'album dall'id e restituisce le informazioni dell'artista
+      description: ritorna i dettagli dell'album assieme ai dettagli dell'artista
+      operationId: albumAndArtist
+      parameters:
+        - name: idAlbum
+          in: path
+          description: id dell'album da ritornare
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Operazione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumEArtista'
+        '404':
+          description: Album non trovato
+        '500':
+          description: Errore del server
+
+  /portale/albums:
+    get:
+      tags:
+        - portale
+      summary: Trova tutti gli album di un genere
+      description: Ritorna una lista di album filtrati per il genere
+      operationId: getAlbumsByGenre
+      parameters:
+        - name: genre
+          in: query
+          description: Genere per filtrare gli album
+          required: true
+          schema:
+            type: string
+            enum: [pop, rock, jazz]
+      responses:
+        '200':
+          description: Operazione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+        '404':
+          description: Nessun album trovato per questo genere
+        '500':
+          description: Errore del server
+
+components:
+  schemas:
+    Artist:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1
+        name:
+          type: string
+          example: Ludovico
+        surname:
+          type: string
+          example: Einaudi
+        stageName:
+          type: string
+          example: Ludovico Einaudi
+        birthYear:
+          type: integer
+          example: 1955
+        biography:
+          type: string
+          example: Ludovico Maria Enrico Einaudi è un compositore e pianista italiano
+        genre:
+          type: string
+          enum: [pop, rock, jazz]
+          example: pop
+        nationality:
+          type: string
+          example: Italiano
+      required:
+        - name
+        - surname
+        - stageName
+        - birthYear
+        - biography
+        - genre
+        - nationality
+
+    Album:
+      type: object
+      properties:
+        idAlbum:
+          type: integer
+          format: int64
+          minimum: 0
+          readOnly: true
+          example: 1
+        title:
+          type: string
+          description: Title of the album
+          example: Nuvole bianche
+        artist:
+          type: string
+          description: Artist of the album
+          example: Ludovico Einaudi
+        year:
+          type: integer
+          example: 2003
+        genre:
+          type: string
+          enum:
+            - pop
+            - rock
+            - jazz
+          example: pop
+        tracks:
+          type: array
+          items:
+            type: string
+          example: ["Nuvole bianche", "Nuvole bianche", "JDK disinstallato"]
+
+    ArtistaEAlbums:
+      type: object
+      properties:
+        artista:
+          $ref: '#/components/schemas/Artist'
+        listaAlbum:
+          $ref: '#/components/schemas/AlbumList'
+
+    AlbumList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Album'
+
+    AlbumEArtista:
+      type: object
+      properties:
+        album:
+          $ref: '#/components/schemas/Album'
+        artista:
+          $ref: '#/components/schemas/Artist'

@@ -2,6 +2,7 @@ package it.apuliadigital.esercizio01albumapi.service.impl;
 
 
 import it.apuliadigital.esercizio01albumapi.entity.AlbumEntity;
+import it.apuliadigital.esercizio01albumapi.mapper.EntityToDTOMapper;
 import it.apuliadigital.esercizio01albumapi.model.Album;
 import it.apuliadigital.esercizio01albumapi.repository.SearchAlbumRepository;
 import it.apuliadigital.esercizio01albumapi.service.SearchAlbumService;
@@ -18,25 +19,8 @@ public class SearchAlbumServiceImpl implements SearchAlbumService {
     @Autowired
     private SearchAlbumRepository searchAlbumRepository;
 
-    private Album getAlbum(Optional<AlbumEntity> entity) {
-
-        if (entity.isEmpty()) {
-            return null;
-        }
-
-        Album album = new Album();
-        album.setIdAlbum(entity.get().getIdAlbum());
-        album.setTitle(entity.get().getTitle());
-        album.setAuthor(entity.get().getAuthor());
-        album.setYear(entity.get().getYear());
-        album.setDataUscita(entity.get().getReleaseDate());
-        album.setGenere(entity.get().getGenre());
-        album.setIsAvailable(entity.get().isAvailable());
-        album.setBand(entity.get().getBand());
-        album.setSongs(entity.get().getTracks());
-
-        return album;
-    }
+    @Autowired
+    EntityToDTOMapper entityToDTOMapper;
 
     @Override
     public List<Album> searchAlbum(String author, Album.GenereEnum genre) {
@@ -45,7 +29,7 @@ public class SearchAlbumServiceImpl implements SearchAlbumService {
             List<AlbumEntity> albumEntities = searchAlbumRepository.findByAuthorAndGenre(author, genre);
             List<Album> albums = new ArrayList<>();
             for (AlbumEntity entity : albumEntities) {
-                albums.add(getAlbum(Optional.of(entity)));
+                albums.add(entityToDTOMapper.entityToDto(Optional.of(entity).get()));
             }
             return albums;
         }
@@ -54,7 +38,7 @@ public class SearchAlbumServiceImpl implements SearchAlbumService {
             List<AlbumEntity> albumEntities = searchAlbumRepository.findByAuthor(author);
             List<Album> albums = new ArrayList<>();
             for (AlbumEntity entity : albumEntities) {
-                albums.add(getAlbum(Optional.of(entity)));
+                albums.add(entityToDTOMapper.entityToDto(Optional.of(entity).get()));
             }
             return albums;
         }
@@ -63,7 +47,7 @@ public class SearchAlbumServiceImpl implements SearchAlbumService {
             List<AlbumEntity> albumEntities = searchAlbumRepository.findByGenre(genre);
             List<Album> albums = new ArrayList<>();
             for (AlbumEntity entity : albumEntities) {
-                albums.add(getAlbum(Optional.of(entity)));
+                albums.add(entityToDTOMapper.entityToDto(Optional.of(entity).get()));
             }
             return albums;
         }

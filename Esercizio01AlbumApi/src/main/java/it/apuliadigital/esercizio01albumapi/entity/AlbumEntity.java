@@ -61,6 +61,10 @@ public class AlbumEntity {
         return idAlbum;
     }
 
+    public void setIdAlbum(Long idAlbum) {
+        this.idAlbum = idAlbum;
+    }
+
     public String getTitle() {
         return title;
     }
