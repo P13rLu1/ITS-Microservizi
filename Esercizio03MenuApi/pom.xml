@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>it.apuliadigital</groupId>
-    <artifactId>Esercizio01AlbumApi</artifactId>
+    <artifactId>Esercizio03MenuApi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Esercizio01AlbumApi</name>
-    <description>Esercizio01AlbumApi</description>
+    <name>Esercizio03MenuApi</name>
+    <description>Esercizio03MenuApi</description>
     <url/>
     <licenses>
         <license/>
@@ -30,6 +30,11 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -51,11 +56,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
@@ -89,11 +89,11 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                ${project.basedir}/src/main/resources/openapi.album.yaml
+                                ${project.basedir}/src/main/resources/openapi.menu.yaml
                             </inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>it.apuliadigital.esercizio01albumapi.api</apiPackage>
-                            <modelPackage>it.apuliadigital.esercizio01albumapi.model</modelPackage>
+                            <apiPackage>it.apuliadigital.esercizio03menuapi.api</apiPackage>
+                            <modelPackage>it.apuliadigital.esercizio03menuapi.model</modelPackage>
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>

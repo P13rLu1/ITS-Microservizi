@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  title: API album
+  description: |-
+    Una API che consente la creazione, lettura e modifica 
+    ed eliminazione di un menu di un ristorante.
+  version: 1.0.0
+  contact:
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /menu:
+    post:
+      tags:
+        - menu
+      summary: Crea un nuovo piatto
+      description: Crea un nuovo piatto nel menu del ristorante
+      operationId: creaPiatto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PiattoDTO'
+      responses:
+        '201':
+          description: Piatto creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PiattoDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    get:
+      tags:
+        - menu
+      summary: Restituisce la lista dei piatti
+      description: Restituisce la lista dei piatti presenti nel menu del ristorante
+      operationId: listaPiatti
+      responses:
+        '200':
+          description: Lista dei piatti
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaPiattoDTO'
+        '500':
+          description: Errore interno del server
+
+  /menu/{idPiatto}:
+    parameters:
+      - in: path
+        name: idPiatto
+        required: true
+        description: L'ID del piatto
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - menu
+      summary: Restituisce un piatto
+      description: Restituisce un piatto presente nel menu del ristorante
+      operationId: piatto
+      responses:
+        '200':
+          description: Piatto trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PiattoDTO'
+        '404':
+          description: Piatto non trovato
+        '500':
+          description: Errore interno del server
+
+    put:
+      tags:
+        - menu
+      summary: Modifica un piatto
+      description: Modifica un piatto presente nel menu del ristorante
+      operationId: modificaPiatto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PiattoDTO'
+      responses:
+        '200':
+          description: Piatto modificato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PiattoDTO'
+        '404':
+          description: Piatto non trovato
+        '500':
+          description: Errore interno del server
+
+    delete:
+      tags:
+        - menu
+      summary: Elimina un piatto
+      description: Elimina un piatto presente nel menu del ristorante
+      operationId: eliminaPiatto
+      responses:
+        '204':
+          description: Piatto eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PiattoDTO'
+        '404':
+          description: Piatto non trovato
+        '500':
+          description: Errore interno del server
+
+  # Estrazione lista piatti scelta tipologia
+  /menu/tipologia/:
+    parameters:
+      - in: query
+        name: tipologiaPiatto
+        required: true
+        description: La tipologia del piatto
+        schema:
+          type: string
+          enum: [ "Primo", "Secondo", "Contorno", "Dolce" ]
+
+    get:
+      tags:
+        - menu
+      summary: Restituisce la lista dei piatti per tipologia
+      description: Restituisce la lista dei piatti presenti nel menu del ristorante per tipologia
+      operationId: listaPiattiTipologia
+      responses:
+        '200':
+          description: Lista dei piatti per tipologia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaPiattoDTO'
+        '500':
+          description: Errore interno del server
+
+components:
+  schemas:
+    PiattoDTO:
+      type: object
+      properties:
+        idPiatto:
+          type: integer
+          format: int64
+          readOnly: true
+          description: L'ID del piatto
+          example: 1
+        nomePiatto:
+          type: string
+          description: Il nome del piatto
+          example: "Spaghetti al pomodoro"
+        ingredienti:
+          type: array
+          items:
+            type: string
+          description: Gli ingredienti del piatto
+          example: [ "pomodoro", "pasta" ]
+        prezzoAlPubblico:
+          type: number
+          format: double
+          description: Il prezzo del piatto
+          example: 5.0
+        tipologiaPiatto:
+          type: string
+          description: La tipologia del piatto
+          example: "Primo"
+          enum:
+            - Primo
+            - Secondo
+            - Contorno
+            - Dolce
+
+    ListaPiattoDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/PiattoDTO'
