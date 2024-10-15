@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: API album
+  description: |-
+    Una API che consente la creazione, lettura e modifica 
+    ed eliminazione dell'anagrafica di una persona.
+  version: 1.0.0
+  contact:
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /persona:
+    post:
+      tags:
+        - persona
+      summary: Crea una nuova persona
+      description: Crea una nuova persona nell'anagrafica
+      operationId: creaPersona
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaDTO'
+      responses:
+        '201':
+          description: Persona creata con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonaDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    get:
+      tags:
+        - persona
+      summary: Restituisce la lista delle persone
+      description: Restituisce la lista delle persone presenti nell'anagrafica
+      operationId: listaPersone
+      responses:
+        '200':
+          description: Lista delle persone
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaPersonaDTO'
+        '500':
+          description: Errore interno del server
+
+  /persona/{idAnagrafica}:
+    parameters:
+      - in: path
+        name: idAnagrafica
+        required: true
+        description: L'ID dell'anagrafica
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - persona
+      summary: Restituisce una persona
+      description: Restituisce una persona presente nell'anagrafica
+      operationId: persona
+      responses:
+        '200':
+          description: Persona trovata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonaDTO'
+        '404':
+          description: Persona non trovata
+        '500':
+          description: Errore interno del server
+
+    put:
+      tags:
+        - persona
+      summary: Modifica una persona
+      description: Modifica una persona presente nell'anagrafica
+      operationId: modificaPersona
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaDTO'
+      responses:
+        '200':
+          description: Persona modificata con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonaDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    delete:
+      tags:
+        - persona
+      summary: Elimina una persona
+      description: Elimina una persona presente nell'anagrafica
+      operationId: eliminaPersona
+      responses:
+        '200':
+          description: Persona eliminata con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonaDTO'
+        '404':
+          description: Persona non trovata
+        '500':
+          description: Errore interno del server
+
+components:
+  schemas:
+    PersonaDTO:
+      type: object
+      properties:
+        idAnagrafica:
+          type: integer
+          format: int64
+          readOnly: true
+          description: L'ID dell'anagrafica
+          example: 1
+        nome:
+          type: string
+          description: Il nome della persona
+          example: Franco
+        cognome:
+          type: string
+          description: Il cognome della persona
+          example: Calogero
+        #        deve essere un hashmap
+        numeriTelefonici:
+          type: object
+          description: I numeri telefonici della persona
+          additionalProperties:
+            type: string
+          example:
+            cellulare: "3333333333"
+            fisso: "0911111111"
+        elencoIndirizziEmail:
+          type: array
+          items:
+            type: string
+          description: L'elenco degli indirizzi email della persona
+          example: [ "email1@email.com", "email2@email.com" ]
+        dataNascita:
+          type: string
+          description: La data di nascita della persona
+          example: 1990-01-01
+
+    ListaPersonaDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/PersonaDTO'
