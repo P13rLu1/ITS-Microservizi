@@ -32,8 +32,8 @@ public class PortaleController implements PortaleApi {
     @Override
     public ResponseEntity<AlbumEArtista> albumAndArtist(@Parameter(name = "idAlbum", description = "id dell'album da ritornare", required = true, in = ParameterIn.PATH) @PathVariable("idAlbum") Long idAlbum) {
 
-        logger.info("Chiamata al servizio albumAndArtist con idAlbum: {}", idAlbum);
-        return new ResponseEntity<>(HttpStatus.OK);
+        AlbumEArtista albumEArtista = portaleService.albumAndArtist(idAlbum);
+        return new ResponseEntity<>(albumEArtista, HttpStatus.OK);
     }
 
     @Override
@@ -46,8 +46,7 @@ public class PortaleController implements PortaleApi {
     @Override
     public ResponseEntity<List<Album>> getAlbumsByGenre(@NotNull @Parameter(name = "genre", description = "Genere per filtrare gli album", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "genre") String genre) {
 
-        logger.info("Chiamata al servizio getAlbumsByGenre con genre: {}", genre);
-        return new ResponseEntity<>(HttpStatus.OK);
-
+        List<Album> albums = portaleService.getAlbumsByGenre(genre);
+        return new ResponseEntity<>(albums, HttpStatus.OK);
     }
 }

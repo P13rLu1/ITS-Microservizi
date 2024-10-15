@@ -1,11 +1,6 @@
 package it.apuliadigital.musicapiv4.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 
 import java.util.ArrayList;
@@ -32,6 +27,7 @@ public class AlbumEntity {
     private Integer year;
 
     @Column(name = "genere")
+    @Enumerated(EnumType.STRING)
     private GenreEnum genre;
 
     @Column(name = "id_artista")
