@@ -39,8 +39,8 @@ public class PortaleController implements PortaleApi {
     @Override
     public ResponseEntity<ArtistaEAlbums> artistandAlbum(@Parameter(name = "idArtista", description = "Id dell'artista da ritornare", required = true, in = ParameterIn.PATH) @PathVariable("idArtista") Long idArtista) {
 
-        logger.info("Chiamata al servizio artistandAlbum con idArtista: {}", idArtista);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ArtistaEAlbums artistaEAlbums = portaleService.artistandAlbum(idArtista);
+        return new ResponseEntity<>(artistaEAlbums, HttpStatus.OK);
     }
 
     @Override
