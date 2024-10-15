@@ -47,7 +47,7 @@ public class PortaleController implements PortaleApi {
     public ResponseEntity<List<Album>> getAlbumsByGenre(@NotNull @Parameter(name = "genre", description = "Genere per filtrare gli album", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "genre") String genre) {
 
         logger.info("Chiamata al servizio getAlbumsByGenre con genre: {}", genre);
-        return new ResponseEntity<>(HttpStatus.GONE);
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 }
