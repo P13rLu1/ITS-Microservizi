@@ -77,34 +77,34 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-<!--			<plugin>-->
-<!--				<groupId>org.openapitools</groupId>-->
-<!--				<artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--				<version>7.8.0</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<goals>-->
-<!--							<goal>generate</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<inputSpec>-->
-<!--								${project.basedir}/src/main/resources/openapi.grocerylist.yaml-->
-<!--							</inputSpec>-->
-<!--							<generatorName>spring</generatorName>-->
-<!--							<apiPackage>it.apuliadigital.esercizio06mongoexample.api</apiPackage>-->
-<!--							<modelPackage>it.apuliadigital.esercizio06mongoexample.model</modelPackage>-->
-<!--							<supportingFilesToGenerate>-->
-<!--								ApiUtil.java-->
-<!--							</supportingFilesToGenerate>-->
-<!--							<configOptions>-->
-<!--								<useSpringBoot3>true</useSpringBoot3>-->
-<!--								<delegatePattern>false</delegatePattern>-->
-<!--								<interfaceOnly>true</interfaceOnly>-->
-<!--							</configOptions>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.8.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/openapi.grocerylist.yaml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>it.apuliadigital.esercizio06mongoexample.api</apiPackage>
+							<modelPackage>it.apuliadigital.esercizio06mongoexample.model</modelPackage>
+							<supportingFilesToGenerate>
+								ApiUtil.java
+							</supportingFilesToGenerate>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+								<delegatePattern>false</delegatePattern>
+								<interfaceOnly>true</interfaceOnly>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

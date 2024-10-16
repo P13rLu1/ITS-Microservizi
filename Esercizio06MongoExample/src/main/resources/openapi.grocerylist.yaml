@@ -1,0 +1,148 @@
+openapi: 3.0.3
+info:
+  title: API album
+  description: |-
+    Una API che consente la creazione, lettura e modifica 
+    ed eliminazione degli item della grocerylist.
+  version: 1.0.0
+  contact:
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /groceryitem:
+    post:
+      tags:
+        - groceryitem
+      summary: Crea un nuovo item
+      description: Crea un nuovo item nella grocerylist
+      operationId: creaItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroceryItemDTO'
+      responses:
+        '201':
+          description: Item creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryItemDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    get:
+      tags:
+        - groceryitem
+      summary: Restituisce la lista degli item
+      description: Restituisce la lista degli item presenti nella grocerylist
+      operationId: listaItem
+      responses:
+        '200':
+          description: Lista degli item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaGroceryItemDTO'
+        '500':
+          description: Errore interno del server
+
+  /groceryitem/{idItem}:
+    parameters:
+      - in: path
+        name: idItem
+        required: true
+        description: L'ID dell'item
+        schema:
+          type: string
+    get:
+      tags:
+        - groceryitem
+      summary: Restituisce un item
+      description: Restituisce un item presente nella grocerylist
+      operationId: getItem
+      responses:
+        '200':
+          description: Item restituito con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryItemDTO'
+        '404':
+          description: Item non trovato
+        '500':
+          description: Errore interno del server
+
+    put:
+      tags:
+        - groceryitem
+      summary: Modifica un item
+      description: Modifica un item presente nella grocerylist
+      operationId: modificaItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroceryItemDTO'
+      responses:
+        '200':
+          description: Item modificato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryItemDTO'
+        '400':
+          description: Errore nella richiesta
+        '404':
+          description: Item non trovato
+        '500':
+          description: Errore interno del server
+
+    delete:
+      tags:
+        - groceryitem
+      summary: Elimina un item
+      description: Elimina un item presente nella grocerylist
+      operationId: eliminaItem
+      responses:
+        '204':
+          description: Item eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryItemDTO'
+        '404':
+          description: Item non trovato
+        '500':
+          description: Errore interno del server
+
+components:
+  schemas:
+    GroceryItemDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: L'ID dell'item
+          example: "Whole Wheat Biscuit"
+        name:
+          type: string
+          description: Il nome dell'item
+          example: "Whole Wheat Biscuit"
+        quantity:
+          type: integer
+          description: La quantità dell'item
+          example: 2
+        category:
+          type: string
+          description: La categoria dell'item
+          example: "Biscuit"
+
+    ListaGroceryItemDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/GroceryItemDTO'
