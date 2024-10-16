@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Document("groceryItems")
+@Document(collection = "groceryItems")
 public class GroceryItem {
 
     @Id

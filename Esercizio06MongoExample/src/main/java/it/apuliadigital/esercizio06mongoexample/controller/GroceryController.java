@@ -69,4 +69,22 @@ public class GroceryController implements GroceryitemApi {
 
         return new ResponseEntity<>(groceryItem, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<List<GroceryItemDTO>> getItemByCategory(@Parameter(name = "category", description = "La categoria dell'item", required = true, in = ParameterIn.PATH) @PathVariable("category") String category) {
+        List<GroceryItemDTO> groceryItems = groceryService.findByCategory(category);
+
+        logger.info("Lista item in base alla categoria recuperata con successo");
+
+        return new ResponseEntity<>(groceryItems, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GroceryItemDTO> getItemByName(@Parameter(name = "name", description = "Il nome dell'item", required = true, in = ParameterIn.PATH) @PathVariable("name") String name) {
+        GroceryItemDTO groceryItem = groceryService.findByName(name);
+
+        logger.info("Item tramite nome recuperato con successo");
+
+        return new ResponseEntity<>(groceryItem, HttpStatus.OK);
+    }
 }

@@ -11,8 +11,8 @@ public interface GroceryRepository extends MongoRepository<GroceryItem, String> 
     @Query("{ 'name' : ?0 }")
     GroceryItem findByName(String name);
 
-    @Query(value = "{category :  '?0'}", fields = "{name : 1, quantity : 1}")
+    @Query(value = "{category :  '?0'}", fields = "{name : 1, quantity : 1, category : 1}")
     List<GroceryItem> findByCategory(String category);
 
-    public long count();
+    long count();
 }

@@ -102,6 +102,60 @@ paths:
         '500':
           description: Errore interno del server
 
+  /groceryitem/searchByName/{name}:
+    parameters:
+      - in: path
+        name: name
+        required: true
+        description: Il nome dell'item
+        schema:
+          type: string
+
+    get:
+      tags:
+        - groceryitem
+      summary: Restituisce un item
+      description: Restituisce un item presente nella grocerylist
+      operationId: getItemByName
+      responses:
+        '200':
+          description: Item restituito con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryItemDTO'
+        '404':
+          description: Item non trovato
+        '500':
+          description: Errore interno del server
+
+  /groceryitem/searchByCategory/{category}:
+    parameters:
+      - in: path
+        name: category
+        required: true
+        description: La categoria dell'item
+        schema:
+          type: string
+
+    get:
+      tags:
+        - groceryitem
+      summary: Restituisce una lista di item
+      description: Restituisce una lista di item presenti nella grocerylist
+      operationId: getItemByCategory
+      responses:
+        '200':
+          description: Lista degli item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListaGroceryItemDTO'
+        '404':
+          description: Item non trovato
+        '500':
+          description: Errore interno del server
+
     delete:
       tags:
         - groceryitem

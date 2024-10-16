@@ -66,4 +66,20 @@ public class GroceryServiceImpl implements GroceryService {
         itemToUpdate = groceryRepository.save(itemToUpdate);
         return groceryMapper.toGroceryItemDTO(itemToUpdate);
     }
+
+    @Override
+    public List<GroceryItemDTO> findByCategory(String category) {
+        List<GroceryItem> groceryItems = groceryRepository.findByCategory(category);
+        List<GroceryItemDTO> groceryItemDTOs = new ArrayList<>();
+        for(GroceryItem groceryItem : groceryItems){
+            groceryItemDTOs.add(groceryMapper.toGroceryItemDTO(groceryItem));
+        }
+        return groceryItemDTOs;
+    }
+
+    @Override
+    public GroceryItemDTO findByName(String name) {
+        Optional<GroceryItem> groceryItem = Optional.ofNullable(groceryRepository.findByName(name));
+        return groceryItem.map(item -> groceryMapper.toGroceryItemDTO(item)).orElse(null);
+    }
 }

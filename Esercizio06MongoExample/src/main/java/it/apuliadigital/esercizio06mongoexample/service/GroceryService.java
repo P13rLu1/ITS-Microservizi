@@ -15,4 +15,8 @@ public interface GroceryService {
     GroceryItemDTO deleteItem(String id);
 
     GroceryItemDTO updateItem(GroceryItemDTO groceryItemDTO, String id);
+
+    List<GroceryItemDTO> findByCategory(String category);
+
+    GroceryItemDTO findByName(String name);
 }
