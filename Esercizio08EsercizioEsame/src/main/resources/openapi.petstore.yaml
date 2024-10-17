@@ -1,0 +1,182 @@
+openapi: "3.0.0"
+info:
+  title: API PetStore
+  description: |-
+    An API to manage pets
+  version: 1.0.0
+  contact: 
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /pets:
+    get:
+      tags:
+        - Pet
+      summary: List all pets
+      operationId: getPets
+      description: Returns all pets from the system that the user has access to
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            maximum: 100
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListPetDTO"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      tags:
+        - Pet
+      summary: Add a new pet to the store
+      description: create a new pet
+      operationId: addPet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetDTO'
+        required: true
+      responses:
+        '201':
+          description: pet created successfully
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /pets/{petId}:
+    parameters:
+      - in: path
+        name: petId
+        required: true
+        description: ID of pet to return
+        schema:
+          type: integer
+          format: int64
+
+    get:
+      tags:
+        - Pet
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PetDTO"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      tags:
+        - Pet
+      summary: Update an existing pet
+      description: Update an existing pet
+      operationId: updatePet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetDTO'
+        required: true
+      responses:
+        '200':
+          description: Pet updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      tags:
+        - Pet
+      summary: Deletes a pet
+      description: Deletes a pet
+      operationId: deletePet
+      responses:
+        '204':
+          description: Pet deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetDTO'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    PetDTO:
+      type: object
+      properties:
+        petId:
+          type: integer
+          format: int64
+#          readOnly: true
+          description: pet id
+          example: 1
+        name:
+          type: string
+          description: pet name
+          example: Fido
+        tag:
+          type: string
+          description: pet tag
+          example: cane
+    ListPetDTO:
+      type: array
+      maxItems: 100
+      items:
+        $ref: "#/components/schemas/PetDTO"
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
