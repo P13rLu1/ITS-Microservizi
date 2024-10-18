@@ -1,0 +1,306 @@
+openapi: 3.0.3
+info:
+  title: API album
+  description: |-
+    Una API che consente la creazione, lettura e modifica 
+    ed eliminazione degli artisti e dei loro album.
+  version: 1.0.0
+  contact:
+    email: pierluigibuttazzo.21@gmail.com
+
+paths:
+  /artist:
+    post:
+      tags:
+        - artist
+      summary: Crea un nuovo artista
+      description: Crea un nuovo artista
+      operationId: creaArtista
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDTO'
+      responses:
+        '201':
+          description: Artista creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    get:
+      tags:
+        - artist
+      summary: Restituisce la lista degli artisti
+      description: Restituisce la lista degli artisti
+      operationId: listaArtisti
+      responses:
+        '200':
+          description: Lista degli artisti
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListArtistDTO'
+        '500':
+          description: Errore interno del server
+
+  /artist/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: L'ID dell'artista
+        schema:
+          type: integer
+
+    get:
+      tags:
+        - artist
+      summary: Restituisce l'artista con l'ID specificato
+      description: Restituisce l'artista con l'ID specificato
+      operationId: getArtista
+      responses:
+        '200':
+          description: Artista trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDTO'
+        '404':
+          description: Artista non trovato
+        '500':
+          description: Errore interno del server
+
+    put:
+      tags:
+        - artist
+      summary: Modifica l'artista con l'ID specificato
+      description: Modifica l'artista con l'ID specificato
+      operationId: modificaArtista
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDTO'
+      responses:
+        '200':
+          description: Artista modificato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDTO'
+        '400':
+          description: Errore nella richiesta
+        '404':
+          description: Artista non trovato
+        '500':
+          description: Errore interno del server
+
+    delete:
+      tags:
+        - artist
+      summary: Elimina l'artista con l'ID specificato
+      description: Elimina l'artista con l'ID specificato
+      operationId: eliminaArtista
+      responses:
+        '204':
+          description: Artista eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistDTO'
+        '404':
+          description: Artista non trovato
+        '500':
+          description: Errore interno del server
+
+  /album:
+    post:
+      tags:
+        - album
+      summary: Crea un nuovo album
+      description: Crea un nuovo album
+      operationId: creaAlbum
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumDTO'
+      responses:
+        '201':
+          description: Album creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumDTO'
+        '400':
+          description: Errore nella richiesta
+        '500':
+          description: Errore interno del server
+
+    get:
+      tags:
+        - album
+      summary: Restituisce la lista degli album
+      description: Restituisce la lista degli album
+      operationId: listaAlbum
+      responses:
+        '200':
+          description: Lista degli album
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAlbumDTO'
+        '500':
+          description: Errore interno del server
+
+  /album/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: L'ID dell'album
+        schema:
+          type: integer
+
+    get:
+      tags:
+        - album
+      summary: Restituisce l'album con l'ID specificato
+      description: Restituisce l'album con l'ID specificato
+      operationId: getAlbum
+      responses:
+        '200':
+          description: Album trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumDTO'
+        '404':
+          description: Album non trovato
+        '500':
+          description: Errore interno del server
+
+    put:
+      tags:
+        - album
+      summary: Modifica l'album con l'ID specificato
+      description: Modifica l'album con l'ID specificato
+      operationId: modificaAlbum
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlbumDTO'
+      responses:
+        '200':
+          description: Album modificato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumDTO'
+        '400':
+          description: Errore nella richiesta
+        '404':
+          description: Album non trovato
+        '500':
+          description: Errore interno del server
+
+    delete:
+      tags:
+        - album
+      summary: Elimina l'album con l'ID specificato
+      description: Elimina l'album con l'ID specificato
+      operationId: eliminaAlbum
+      responses:
+        '204':
+          description: Album eliminato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumDTO'
+        '404':
+          description: Album non trovato
+        '500':
+          description: Errore interno del server
+
+components:
+  schemas:
+    AlbumDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: L'ID dell'album
+          example: 1
+        title:
+          type: string
+          description: Il titolo dell'album
+          example: "The Dark Side of the Moon"
+        releaseDate:
+          type: string
+          description: La data di uscita dell'album
+          example: "1973-03-01"
+        trackTitles:
+          type: array
+          description: I titoli delle tracce dell'album
+          items:
+            type: string
+          example:
+            - "Speak to Me"
+            - "Breathe"
+            - "On the Run"
+            - "Time"
+            - "The Great Gig in the Sky"
+            - "Money"
+            - "Us and Them"
+            - "Any Colour You Like"
+            - "Brain Damage"
+            - "Eclipse"
+        artistName:
+          type: string
+          description: Il nome dell'artista
+          example: "Pink Floyd"
+
+    ListAlbumDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/AlbumDTO'
+
+    ArtistDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: L'ID dell'artista
+          example: 1
+        name:
+          type: string
+          description: Il nome dell'artista
+          example: "Pink Floyd"
+        genres:
+          type: array
+          description: I generi musicali dell'artista
+          items:
+            type: string
+          example:
+            - "Rock"
+            - "Progressive rock"
+        country:
+          type: string
+          description: Il paese di provenienza dell'artista
+          example: "Regno Unito"
+
+    ListArtistDTO:
+      type: array
+      items:
+        $ref: '#/components/schemas/ArtistDTO'
